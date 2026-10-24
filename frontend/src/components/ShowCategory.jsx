@@ -28,12 +28,12 @@ const ShowCategory = () => {
     return (
         <>
         <div className="container mt-4">
-            <h3 className="mb-4">Product Categories</h3>
+            <h3 className="mb-4 text-center">Product Categories</h3>
             <div className="row g-3">
                 {categories.map((category)=>(
                     <div className="col-md-4" key={category._id}>
                         <div className="card h-100 shadow-sm border-0">
-                            <div className="card-body">
+                            <div className="card-body border shadow rounded">
                                 <h4 className="card-title mb-3">{category.categoryName}</h4>
                                 <p className="card-text text-secondary">{category.description}</p>
                                 <hr/>

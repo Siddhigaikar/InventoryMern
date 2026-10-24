@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
 import Home from './components/Home'
 import AddProduct from './components/AddProduct'
 import EditProduct from './components/EditProduct'
@@ -15,16 +15,16 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-      <Navbar/>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/add' element={<AddProduct/>}/>
-        <Route path='/edit/:id' element={<EditProduct/>}/>
-        <Route path='/products/:id' element={<ShowProduct/>}/>
-        <Route path='/category/add' element={<AddCategory/>}/>
-        <Route path='/categories' element={<ShowCategory/>}/>
+        <Route path='/' element={<Navigate to="/register" replace/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/home' element={<><Navbar/><Home/></>}/>
+        <Route path='/add' element={<><Navbar/><AddProduct/></>}/>
+        <Route path='/edit/:id' element={<><Navbar/><EditProduct/></>}/>
+        <Route path='/products/:id' element={<><Navbar/><ShowProduct/></>}/>
+        <Route path='/category/add' element={<><Navbar/><AddCategory/></>}/>
+        <Route path='/categories' element={<><Navbar/><ShowCategory/></>}/>
       </Routes>
       </BrowserRouter>
     </>

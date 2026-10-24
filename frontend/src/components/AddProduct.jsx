@@ -19,7 +19,7 @@ const AddProduct = () => {
     .then((res)=>{
         console.log(res.data)
         alert("Product added successfully")
-        navigate('/')
+        navigate('/home')
     })
     .catch((err)=>{
         console.log(err)

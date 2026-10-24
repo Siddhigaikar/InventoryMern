@@ -1,14 +1,20 @@
 import React from 'react'
-import {NavLink} from 'react-router-dom'
+import {NavLink, useNavigate} from 'react-router-dom'
 
 const Navbar = () => {
+    const navigate=useNavigate()
+
+    const handleLogout=()=>{
+        localStorage.removeItem("login")
+        navigate('/login')
+    }
   return (
     <>
       <nav
         className="navbar navbar-expand-sm navbar-dark bg-dark"
       >
         <div className="container">
-            <NavLink className="navbar-brand" to="/">Inventory</NavLink>
+            <NavLink className="navbar-brand" to="/home">Inventory</NavLink>
             <button
                 className="navbar-toggler d-lg-none"
                 type="button"
@@ -23,7 +29,7 @@ const Navbar = () => {
             <div className="collapse navbar-collapse" id="collapsibleNavId">
                 <ul className="navbar-nav me-auto mt-2 mt-lg-0">
                     <li className="nav-item">
-                        <NavLink className="nav-link active" to="/" aria-current="page"
+                        <NavLink className="nav-link active" to="/home" aria-current="page"
                             >Home
                             <span className="visually-hidden">(current)</span></NavLink>
                     </li>
@@ -39,6 +45,7 @@ const Navbar = () => {
                     </li>
                     
                 </ul>
+                <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
                 
             </div>
         </div>

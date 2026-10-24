@@ -18,7 +18,7 @@ const ShowProduct = () => {
     axios.delete(`http://localhost:4000/delete/${id}`)
       .then((res) => {
         alert(res.data.message)
-        navigate('/')
+        navigate('/home')
       })
       .catch((err) => console.log(err))
   }
@@ -39,7 +39,7 @@ const ShowProduct = () => {
 
             <NavLink
               className="btn btn-secondary me-3"
-              to="/"
+              to="/home"
               role="button"
               >Back</NavLink>
 
