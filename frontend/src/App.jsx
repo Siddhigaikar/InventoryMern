@@ -1,3 +1,4 @@
+
 import React from 'react'
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
 import Home from './components/Home'
@@ -10,6 +11,43 @@ import AddCategory from './components/AddCategory'
 import ShowCategory from './components/ShowCategory'
 import Register from './components/Register'
 import Login from './components/Login'
+import Cart from './components/Cart'
+import PlaceOrder from './components/PlaceOrder'
+import MyOrders from './components/MyOrders'
+import Orders from './components/Orders'
+import Dashboard from './components/Dashboard'
+
+const AdminRoute = ({children}) => {
+  if(!localStorage.getItem("login")){
+    return <Navigate to="/login"/>
+  }
+
+  if(localStorage.getItem("role") != "admin"){
+    return <Navigate to="/home"/>
+  }
+
+  return children
+}
+
+const UserRoute = ({children}) => {
+  if(!localStorage.getItem("login")){
+    return <Navigate to="/login"/>
+  }
+
+  return children
+}
+
+const CustomerRoute = ({children}) => {
+  if(!localStorage.getItem("login")){
+    return <Navigate to="/login"/>
+  }
+
+  if(localStorage.getItem("role") != "customer"){
+    return <Navigate to="/home"/>
+  }
+
+  return children
+}
 
 const App = () => {
   return (
@@ -19,12 +57,21 @@ const App = () => {
         <Route path='/' element={<Navigate to="/register" replace/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/home' element={<><Navbar/><Home/></>}/>
-        <Route path='/add' element={<><Navbar/><AddProduct/></>}/>
-        <Route path='/edit/:id' element={<><Navbar/><EditProduct/></>}/>
-        <Route path='/products/:id' element={<><Navbar/><ShowProduct/></>}/>
-        <Route path='/category/add' element={<><Navbar/><AddCategory/></>}/>
-        <Route path='/categories' element={<><Navbar/><ShowCategory/></>}/>
+
+        <Route path='/home' element={<UserRoute><><Navbar/><Home/></></UserRoute>}/>
+
+        <Route path='/add' element={<AdminRoute><><Navbar/><AddProduct/></></AdminRoute>}/>
+        <Route path='/edit/:id' element={<AdminRoute><><Navbar/><EditProduct/></></AdminRoute>}/>
+        <Route path='/products/:id' element={<UserRoute><><Navbar/><ShowProduct/></></UserRoute>}/>
+        <Route path='/category/add' element={<AdminRoute><><Navbar/><AddCategory/></></AdminRoute>}/>
+        <Route path='/categories' element={<AdminRoute><><Navbar/><ShowCategory/></></AdminRoute>}/>
+
+        <Route path='/cart' element={<CustomerRoute><><Navbar/><Cart/></></CustomerRoute>}/>
+        <Route path='/place-order' element={<CustomerRoute><><Navbar/><PlaceOrder/></></CustomerRoute>}/>
+        <Route path='/my-orders' element={<CustomerRoute><><Navbar/><MyOrders/></></CustomerRoute>}/>
+        <Route path='/orders' element={<AdminRoute><><Navbar/><Orders/></></AdminRoute>}/>
+        <Route path='/dashboard' element={<AdminRoute><><Navbar/><Dashboard/></></AdminRoute>}/>
+
       </Routes>
       </BrowserRouter>
     </>

@@ -1,57 +1,92 @@
 
-import axios from 'axios'
 import React, { useState } from 'react'
+import axios from 'axios'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-const Login = () => {
-    const [user,setUser]=useState({
+function Login() {
+
+    const [data,setData] = useState({
         email:"",
         password:""
     })
 
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
-    const handleChange=(e)=>{
-        setUser({...user,[e.target.name]:e.target.value})
+    const handleChange = (e) => {
+        setData({...data,[e.target.name]:e.target.value})
     }
 
-    const handleSubmit=(e)=>{
+    const handleSubmit = async(e) => {
         e.preventDefault()
-        axios.post('http://localhost:4000/login',user)
-        .then((res)=>{
-        alert(res.data.message)
-        if(res.data.message==="Login successful"){
-            localStorage.setItem("login",true)
-            navigate('/home')
+
+        try {
+            const result = await axios.post("http://localhost:4000/login",data)
+
+            alert(result.data.message)
+
+            if(result.data.message == "Login successful"){
+
+                localStorage.setItem("login",true)
+                localStorage.setItem("token",result.data.token)
+                localStorage.setItem("user",JSON.stringify(result.data.user))
+                localStorage.setItem("role",result.data.user.role)
+
+                navigate("/home")
+            }
+
+        } catch (error) {
+            console.log(error)
+            alert("Login failed")
         }
-    })
-        .catch((err)=>{
-            console.log(err)
-            alert(err.response?.data?.message || "Login failed")
-        })
     }
 
     return (
-        <>
-        <h3 className="text-center mt-5">Login With Us</h3>
-        <div className="container border shadow rounded col-5 p-3">
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Email</label>
-                    <input type="email" className="form-control" name="email" value={user.email} onChange={handleChange} required/>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-5">
+                    <h2 className="text-center mb-4">Login</h2>
+
+                    <form onSubmit={handleSubmit}>
+
+                        <div className="form-floating mb-3">
+                            <input
+                                type="email"
+                                className="form-control"
+                                name="email"
+                                placeholder="Email"
+                                value={data.email}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label>Email</label>
+                        </div>
+
+                        <div className="form-floating mb-3">
+                            <input
+                                type="password"
+                                className="form-control"
+                                name="password"
+                                placeholder="Password"
+                                value={data.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label>Password</label>
+                        </div>
+
+                        <button type="submit" className="btn btn-primary w-100">
+                            Login
+                        </button>
+
+                    </form>
+
+                    <p className="text-center mt-3">
+                        Don't have an account?
+                        <NavLink to="/register"> Register</NavLink>
+                    </p>
                 </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Password</label>
-                    <input type="password" className="form-control" name="password" value={user.password} onChange={handleChange} required/>
-                </div>
-
-                <button type="submit" className="btn btn-primary w-100">Login</button>
-            </form>
-
-            <p className="text-center mt-3">Don't have an account? <NavLink to="/register">Register</NavLink></p>
+            </div>
         </div>
-        </>
     )
 }
 

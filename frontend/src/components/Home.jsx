@@ -6,12 +6,31 @@ import { NavLink } from 'react-router-dom'
 const Home = () => {
   const [products,setProducts]=useState([])
   const [search,setSearch]=useState('')
+  const role=localStorage.getItem("role")
 
   useEffect(()=>{
     axios.get('http://localhost:4000/products')
     .then((res)=>setProducts(res.data))
     .catch((err)=>console.log(err))
   },[])
+
+  const handleAddToCart = async(productId) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"))
+
+      const result = await axios.post('http://localhost:4000/cart/add',{
+        userId:user.id,
+        productId:productId,
+        quantity:1
+      })
+
+      alert(result.data.message)
+
+    } catch (error) {
+      console.log(error)
+      alert("Unable to add product to cart")
+    }
+  }
 
   const filteredProducts=products.filter((product)=>
     product.productName.toLowerCase().includes(search.toLowerCase())
@@ -50,10 +69,21 @@ const Home = () => {
                   <h5>Supplier: {product.supplierName}</h5>
 
                   <NavLink
-                    className="btn btn-primary"
+                    className="btn btn-primary me-2"
                     to={`/products/${product._id}`}
                     role="button"
                   >Read More</NavLink>
+
+                  {role == "customer" && (
+                    <button
+                      className="btn btn-success mt-2"
+                      onClick={()=>handleAddToCart(product._id)}
+                      disabled={product.quantity <= 0}
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+
                 </div>
               </div>
             </div>
